@@ -1,4 +1,5 @@
 ﻿using System;
+using DataStructurePrograms.Deque;
 using DataStructuresPractice;
 
 namespace DataStructurePrograms
@@ -13,8 +14,9 @@ namespace DataStructurePrograms
             bool isRun = true;
             while (isRun)
             {
-                Console.WriteLine("Select and enter program number:" +
-                    "(1. Unordered List, 2. Ordered List, 3. Balanced Parentheses, 4. Bank cash counter)");
+                Console.WriteLine("\nSelect and enter program number:" +
+                    "(1. Unordered List, 2. Ordered List, 3. Balanced Parentheses, 4. Bank cash counter," +
+                    "5. Palindrome check by deque)");
                 int programOption = Convert.ToInt32(Console.ReadLine());
                 switch (programOption)
                 {
@@ -37,30 +39,33 @@ namespace DataStructurePrograms
                             string customer = customerQueue.head.data;
                             string customerName = customer.Split("-")[0];
                             int customerBalance = Convert.ToInt32(customer.Split("-")[1]);
-                            bool isDoNextTransaction = true;
-                            while (isDoNextTransaction)
+                            Console.WriteLine($"{customerName},\nSelect an option of transaction(1. Withdraw, 2. Deposit, 3. Check balance): ");
+                            int transactionOption = Convert.ToInt32(Console.ReadLine());
+                            while(transactionOption<0 || transactionOption > 3)
                             {
-                                Console.WriteLine($"{customerName},\nSelect an option of transaction(1. Withdraw, 2. Deposit, 3. Check balance, 4. Exit): ");
-                                int transactionOption = Convert.ToInt32(Console.ReadLine());
-                                switch (transactionOption)
-                                {
-                                    case 1:
-                                        cashCounter.WithDraw(customerName, customerBalance);
-                                        break;
-                                    case 2:
-                                        cashCounter.Deposit(customerName, customerBalance);
-                                        break;
-                                    case 3:
-                                        cashCounter.BalanceCheck(customerName, customerBalance);
-                                        break;
-                                    default:
-                                        customerQueue.Dequeue();
-                                        isDoNextTransaction = !isDoNextTransaction;
-                                        break;
-                                }
+                                Console.WriteLine("Select correct transaction option.");
+                                Console.WriteLine($"{customerName},\nSelect an option of transaction(1. Withdraw, 2. Deposit, 3. Check balance): ");
+                                transactionOption = Convert.ToInt32(Console.ReadLine());
                             }
-                            
+                            switch (transactionOption)
+                            {
+                                case 1:
+                                    cashCounter.WithDraw(customerName, customerBalance);
+                                    customerQueue.Dequeue();
+                                    break;
+                                case 2:
+                                    cashCounter.Deposit(customerName, customerBalance);
+                                    customerQueue.Dequeue();
+                                    break;
+                                case 3:
+                                    cashCounter.BalanceCheck(customerName, customerBalance);
+                                    customerQueue.Dequeue();
+                                    break;
+                            }
                         }
+                        break;
+                    case 5:
+                        new PalindromCheckByDeque().isPalindrome();                        
                         break;
                     default:
                         isRun = !isRun;
