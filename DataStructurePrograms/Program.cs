@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using DataStructurePrograms.Deque;
 using DataStructuresPractice;
 
@@ -11,12 +12,13 @@ namespace DataStructurePrograms
             string inputFilePath = @"G:\BridgeLabz\DataStructuresPrograms\DataStructurePrograms\InputFile.txt";
             string outputFilePath = @"G:\BridgeLabz\DataStructuresPrograms\DataStructurePrograms\OutputFile.txt";
             string equationFilePath = @"G:\BridgeLabz\DataStructuresPrograms\DataStructurePrograms\Equation.txt";
+            string hashingNumbersFilePath = @"G:\BridgeLabz\DataStructuresPrograms\DataStructurePrograms\Hashing\HashingInputNumbers.txt";
             bool isRun = true;
             while (isRun)
             {
                 Console.WriteLine("\nSelect and enter program number:" +
                     "(1. Unordered List, 2. Ordered List, 3. Balanced Parentheses, 4. Bank cash counter," +
-                    "5. Palindrome check by deque)");
+                    "\n5. Palindrome check by deque, 6. Hashing function)");
                 int programOption = Convert.ToInt32(Console.ReadLine());
                 switch (programOption)
                 {
@@ -39,33 +41,38 @@ namespace DataStructurePrograms
                             string customer = customerQueue.head.data;
                             string customerName = customer.Split("-")[0];
                             int customerBalance = Convert.ToInt32(customer.Split("-")[1]);
-                            Console.WriteLine($"{customerName},\nSelect an option of transaction(1. Withdraw, 2. Deposit, 3. Check balance): ");
-                            int transactionOption = Convert.ToInt32(Console.ReadLine());
-                            while(transactionOption<0 || transactionOption > 3)
+                            bool isDoNextTransaction = true;
+                            while (isDoNextTransaction)
                             {
-                                Console.WriteLine("Select correct transaction option.");
-                                Console.WriteLine($"{customerName},\nSelect an option of transaction(1. Withdraw, 2. Deposit, 3. Check balance): ");
-                                transactionOption = Convert.ToInt32(Console.ReadLine());
+                                Console.WriteLine($"{customerName},\nSelect an option of transaction(1. Withdraw, 2. Deposit, 3. Check balance, 4. Exit): ");
+                                int transactionOption = Convert.ToInt32(Console.ReadLine());
+                                switch (transactionOption)
+                                {
+                                    case 1:
+                                        cashCounter.WithDraw(customerName, customerBalance);
+                                        break;
+                                    case 2:
+                                        cashCounter.Deposit(customerName, customerBalance);
+                                        break;
+                                    case 3:
+                                        cashCounter.BalanceCheck(customerName, customerBalance);
+                                        break;
+                                    default:
+                                        customerQueue.Dequeue();
+                                        isDoNextTransaction = !isDoNextTransaction;
+                                        break;
+                                }
                             }
-                            switch (transactionOption)
-                            {
-                                case 1:
-                                    cashCounter.WithDraw(customerName, customerBalance);
-                                    customerQueue.Dequeue();
-                                    break;
-                                case 2:
-                                    cashCounter.Deposit(customerName, customerBalance);
-                                    customerQueue.Dequeue();
-                                    break;
-                                case 3:
-                                    cashCounter.BalanceCheck(customerName, customerBalance);
-                                    customerQueue.Dequeue();
-                                    break;
-                            }
+                            
                         }
                         break;
                     case 5:
                         new PalindromCheckByDeque().isPalindrome();                        
+                        break;
+                    case 6:
+                        int[] numbersList = Array.ConvertAll(File.ReadAllText(hashingNumbersFilePath).Split(","),int.Parse);
+                        // Array.Sort(numbersList);
+                        new HashingFunction().Hashing(numbersList);
                         break;
                     default:
                         isRun = !isRun;
